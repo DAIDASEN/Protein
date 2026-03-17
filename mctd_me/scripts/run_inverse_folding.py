@@ -81,7 +81,13 @@ def parse_args() -> argparse.Namespace:
                    help="Consensus prior temperature τ")
     p.add_argument("--return_top_k", type=int, default=10,
                    help="Top-k sequences to return")
-    p.add_argument("--device", default="cuda", help="PyTorch device")
+    p.add_argument("--device", default="cuda", help="PyTorch device for DPLM-2 experts")
+    p.add_argument("--critic_device", default=None,
+                   help="Device for ESMFold critic, e.g. 'cuda:1'. Defaults to --device.")
+    p.add_argument("--esmfold_chunk_size", type=int, default=None,
+                   help="ESMFold chunk size (lower = less VRAM, e.g. 64 or 32)")
+    p.add_argument("--half_precision", action="store_true",
+                   help="Load DPLM-2 experts in fp16")
     p.add_argument("--seed", type=int, default=42, help="Random seed")
     p.add_argument("--log_level", default="INFO", help="Logging level")
     p.add_argument("--cache_dir", default=None, help="HuggingFace cache dir")
@@ -117,6 +123,8 @@ def main() -> None:
         diffusion_steps=args.diffusion_steps,
         temperature=args.temperature,
         device=args.device,
+        critic_device=args.critic_device,
+        esmfold_chunk_size=args.esmfold_chunk_size,
         seed=args.seed,
         output_dir=str(out_dir),
         cache_dir=args.cache_dir or "~/.cache/mctd_me",

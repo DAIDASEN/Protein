@@ -128,6 +128,8 @@ class MCTDMEConfig:
 
     # --- Infrastructure ---
     device: str = "cuda"
+    critic_device: Optional[str] = None  # If set, ESMFold runs on this device (e.g. "cuda:1")
+    esmfold_chunk_size: Optional[int] = None  # Lower = less VRAM, e.g. 64 or 32
     seed: int = 42
     cache_dir: str = "~/.cache/mctd_me"
     output_dir: str = "./outputs"
