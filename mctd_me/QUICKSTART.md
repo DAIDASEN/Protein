@@ -76,10 +76,10 @@ source ~/.bashrc
 mkdir -p /root/rivermind-data/models
 
 # DPLM-2 150M（约 600 MB，快速验证用）
+
 HF_ENDPOINT=https://hf-mirror.com \
-huggingface-cli download airkingbd/dplm_150m \
-    --local-dir /root/rivermind-data/models/dplm_150m \
-    --local-dir-use-symlinks False
+hf download airkingbd/dplm_150m \
+  --local-dir /root/rivermind-data/models/dplm_150m
 
 # DPLM-2 650M（约 2.6 GB）
 HF_ENDPOINT=https://hf-mirror.com \
@@ -94,12 +94,14 @@ huggingface-cli download airkingbd/dplm_3b \
     --local-dir-use-symlinks False
 
 # ESMFold（约 2.5 GB，用作结构预测 critic）
+
 HF_ENDPOINT=https://hf-mirror.com \
-huggingface-cli download facebook/esmfold_v1 \
+hf download facebook/esmfold_v1 \
     --local-dir /root/rivermind-data/models/esmfold_v1 \
     --local-dir-use-symlinks False
 
 # ProteinMPNN（逆折叠专家，git clone）
+==Done: 这个做了==
 cd /root/rivermind-data/models
 git clone https://ghfast.top/https://github.com/dauparas/ProteinMPNN.git
 # 若上面镜像失败，改用：
@@ -115,10 +117,53 @@ git clone https://ghfast.top/https://github.com/dauparas/ProteinMPNN.git
 ```bash
 conda activate mctd_me
 cd /home/dds/Protein/mctd_me
+TODO: 有报错
+python scripts/download_data.py \
+    --all \
+    --output /root/rivermind-data/data/
+
+    (mctd_me) root@jupyter-rhj5kngad75ppy2m:~/rivermind-data/Protein/mctd_me# conda activate mctd_me
+cd /home/dds/Protein/mctd_me
 
 python scripts/download_data.py \
     --all \
     --output /root/rivermind-data/data/
+bash: cd: /home/dds/Protein/mctd_me: No such file or directory
+
+A module that was compiled using NumPy 1.x cannot be run in
+NumPy 2.2.6 as it may crash. To support both 1.x and 2.x
+versions of NumPy, modules must be compiled with NumPy 2.0.
+Some module may need to rebuild instead e.g. with 'pybind11>=2.12'.
+
+If you are a user of the module, the easiest solution will be to
+downgrade to 'numpy<2' or try to upgrade the affected module.
+We expect that some modules will need time to support NumPy 2.
+
+Traceback (most recent call last):  File "/root/rivermind-data/Protein/mctd_me/scripts/download_data.py", line 30, in <module>
+    from mctd_me.utils import setup_logging, EVODIFF_MOTIF_IDS
+  File "/root/rivermind-data/Protein/mctd_me/mctd_me/__init__.py", line 14, in <module>
+    from mctd_me.mcts import MCTDME
+  File "/root/rivermind-data/Protein/mctd_me/mctd_me/mcts.py", line 47, in <module>
+    from mctd_me.critics import CompositeReward, ESMFoldCritic
+  File "/root/rivermind-data/Protein/mctd_me/mctd_me/critics.py", line 24, in <module>
+    import torch
+  File "/opt/conda/envs/mctd_me/lib/python3.10/site-packages/torch/__init__.py", line 1382, in <module>
+    from .functional import *  # noqa: F403
+  File "/opt/conda/envs/mctd_me/lib/python3.10/site-packages/torch/functional.py", line 7, in <module>
+    import torch.nn.functional as F
+  File "/opt/conda/envs/mctd_me/lib/python3.10/site-packages/torch/nn/__init__.py", line 1, in <module>
+    from .modules import *  # noqa: F403
+  File "/opt/conda/envs/mctd_me/lib/python3.10/site-packages/torch/nn/modules/__init__.py", line 35, in <module>
+    from .transformer import TransformerEncoder, TransformerDecoder, \
+  File "/opt/conda/envs/mctd_me/lib/python3.10/site-packages/torch/nn/modules/transformer.py", line 20, in <module>
+    device: torch.device = torch.device(torch._C._get_default_device()),  # torch.device('cpu'),
+/opt/conda/envs/mctd_me/lib/python3.10/site-packages/torch/nn/modules/transformer.py:20: UserWarning: Failed to initialize NumPy: _ARRAY_API not found (Triggered internally at /opt/conda/conda-bld/pytorch_1702400366987/work/torch/csrc/utils/tensor_numpy.cpp:84.)
+  device: torch.device = torch.device(torch._C._get_default_device()),  # torch.device('cpu'),
+2026-03-17 17:23:32,612 | INFO | __main__ | Downloading 15 unique PDB structures for EvoDiff motifs …
+2026-03-17 17:23:36,877 | INFO | __main__ |   ✓ 1BCF
+2026-03-17 17:23:39,172 | INFO | __main__ |   ✓ 1PRW
+2026-03-17 17:23:42,889 | INFO | __main__ |   ✓ 1QJG
+
 ```
 
 ---

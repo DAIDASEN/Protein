@@ -1,0 +1,5 @@
+[console_scripts]
+mctdme-eval = scripts.evaluate:main
+mctdme-fold = scripts.run_folding:main
+mctdme-inv = scripts.run_inverse_folding:main
+mctdme-motif = scripts.run_motif_scaffolding:main
